@@ -21,6 +21,7 @@ through all 5 positions).
 | metric | value |
 |---|---|
 | 496,705-token prefill (one request) | **341 s** |
+| 4-way decode, low context (prose) | **~112 tok/s aggregate** (~28/stream) |
 | 4-way sustained decode @ ~500K ctx | **31.3 tok/s aggregate** (~7.8/stream) |
 | soak: 752 requests @ ~500K ctx, 4-way | **0 failures, no wedge** |
 | KV pool @ gmu 0.75 | 44.2 GiB · **4.37× concurrency at 1M** |
