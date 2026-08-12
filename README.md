@@ -5,10 +5,9 @@ handful of small, documented patches (all with upstream linkage, most already fi
 upstream). Big context: yes — **1M, actually usable: 4 concurrent 1M-capable streams**, soak-tested
 with 752 requests at ~500K context and zero failures.
 
-As far as we know this is the first public 4-node recipe on *upstream* vLLM, and the highest
-published concurrency at 1M context on Spark hardware (2-node KV pools fit ~2 streams at 1M;
-ours measures 4.37×) (the excellent existing
-4× recipes run the community fork image). If your workload fits 2 nodes and you want maximum
+As far as we know this is the first public 4-node recipe on *upstream* vLLM (the excellent
+existing 4× recipes run the community fork image), and the highest published concurrency at 1M
+context on Spark hardware — 2-node KV pools fit ~2 streams at 1M; ours measures 4.37×. If your workload fits 2 nodes and you want maximum
 single-stream speed, the fork-image recipes are ~15–20% faster there — see
 [docs/benchmarks.md](docs/benchmarks.md) for the honest trade.
 
