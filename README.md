@@ -20,6 +20,9 @@ single-stream speed, the fork-image recipes are ~15–20% faster there — see
   31.3 tok/s. 496K-token prefill: 341 s. Details + methodology: [docs/benchmarks.md](docs/benchmarks.md).
 - **Everything that broke:** the [10-blocker ledger](docs/blockers.md) — each failure between
   `docker run` and production, root-caused, with fixes. This is probably the most useful file here.
+- **Native thinking-token budget** on the DSpark (V2) runner — a from-scratch port
+  (`thinking_token_budget` is V1-only upstream, so DSpark installs 400 the field). Caps `<think>`
+  so it can't eat the whole `max_tokens`. Root cause + design: [docs/thinking-token-budget.md](docs/thinking-token-budget.md).
 - **Ops:** launch / teardown / health-watchdog scripts, a high-context soak test, rollback notes.
 
 ## Quickstart
@@ -65,6 +68,14 @@ Plus two smaller ones: a backport of the open vocab-clamp PR (vllm#50843) that p
 engine-death class under bursty load, and a gate for an unguarded DeepGEMM call in the mHC path
 (unreported upstream; issue draft in [docs/mhc-issue-draft.md](docs/mhc-issue-draft.md)).
 Full inventory: [patches/README.md](patches/README.md).
+
+And one feature, not a bug: [`patches/thinking-token-budget/`](patches/thinking-token-budget/) ports
+`thinking_token_budget` into the V2 GPU runner. DSpark forces the V2 runner, and upstream wired the
+budget only into V1 — so on this recipe a stock install returns *"not yet supported by the V2 model
+runner"*, and an unbounded `<think>` can spend the whole `max_tokens` and return an empty turn. The
+port re-implements it in the V2 sampler (one hook, covers k=5 spec-decode) so you keep DSpark **and**
+get a real cap. Why the gate is genuine and how the port works:
+[docs/thinking-token-budget.md](docs/thinking-token-budget.md).
 
 ## Known limitations, honestly
 
